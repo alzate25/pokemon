@@ -17,15 +17,14 @@ function App() {
     <Router>
       <Menu />
       <Routes>
-        <Route path="/components/aleatorios" element={<Aleatorio />} />
-        <Route path="/components/detalle" element={<Detalle />} />
-        <Route path="/components/favoritos" element={<Favoritos />} />
-        <Route path="/components/listar" element={<Listar />} />
-        <Route path="/components/original" element={<Original />} />
-        <Route path="/components/usuario" element={<Usuario />} />
+        <Route path="/aleatorios" element={<Aleatorio />} />
+        <Route path="/detalle" element={<Detalle />} />
+        <Route path="/favoritos" element={<Favoritos />} />
+        <Route path="/listar" element={<Listar />} />
+        <Route path="/original" element={<Original />} />
+        <Route path="/usuario" element={<Usuario />} />
       </Routes>
     </Router>
-
   )
 }
 
