@@ -6,6 +6,10 @@ function Listar() {
   const [data, setData] = useState([]); // Estado para almacenar los datos de Pokémon
   const [busqueda, setBusqueda] = useState(''); // Estado para almacenar la búsqueda
   const [tipoSeleccionado, setTipoSeleccionado] = useState('All'); // Estado para el tipo de Pokémon
+  const [favoritos, setFavoritos] = useState(() => {
+    const guardados = localStorage.getItem("favoritosPokemon");
+    return guardados ? JSON.parse(guardados) : [];
+  }); // Estado para almacenar los Pokémon favoritos
   const navigate = useNavigate(); // Hook para la navegación
   
   
@@ -35,6 +39,18 @@ function Listar() {
 
   const handleTipoChange = (tipo) => {
     setTipoSeleccionado(tipo); 
+  };
+  // Función para agregar un Pokémon a favoritos
+  // Verifica si el Pokémon ya está en favoritos antes de agregarlo
+  // Si no está, lo agrega y actualiza el localStorage
+  // Si ya está, no hace nada
+  const agregarAFavoritos = (pokemon) => {
+    const existe = favoritos.some(fav => fav.name === pokemon.name);
+    if (!existe) {
+      const nuevos = [...favoritos, pokemon];
+      setFavoritos(nuevos);
+      localStorage.setItem("favoritosPokemon", JSON.stringify(nuevos));
+    }
   };
 
   let resultados = data;
@@ -78,6 +94,12 @@ function Listar() {
               loading='lazy'
             />
             <p>{pokemon.name}</p>
+            <button onClick={(e) => {
+                e.stopPropagation(); // evita que navegue al detalle
+                agregarAFavoritos(pokemon);
+              }}>
+                ⭐ Agregar a Favoritos
+              </button>
           </div>
         ))}
       </section>
