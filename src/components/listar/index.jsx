@@ -94,7 +94,7 @@ function Listar() {
               loading='lazy'
             />
             <p>{pokemon.name}</p>
-            <button onClick={(e) => {
+              <button onClick={(e) => {
                 e.stopPropagation(); // evita que navegue al detalle
                 agregarAFavoritos(pokemon);
               }}>
