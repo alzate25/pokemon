@@ -1,19 +1,55 @@
-import { Link } from 'react-router-dom'
-
-import './style.css'
+// src/Componentes/Menu/index.jsx
+import { Link, NavLink } from 'react-router-dom'; // Importar NavLink también para estilos activos
+import "./style.css"; // Asegúrate de que este archivo exista en la misma carpeta (src/Componentes/Menu/style.css)
 
 function Menu() {
-
   return (
-    <nav className='c-menu'>
-      <Link to="./aleatorios">Aleatorio</Link>
-      <Link to="./detalle">Detalle</Link>
-      <Link to="./favoritos">Favorito</Link>
-      <Link to="./listar">Listar</Link>
-      <Link to="./original">Original</Link>
-      <Link to="./usuario">Usuario</Link>
+    <nav className="c-menu">
+      <ul className="c-menu-lista">
+        <li className="c-menu-item">
+          {/* Usar NavLink permite aplicar estilos al enlace activo automáticamente */}
+          <NavLink
+            to="/"
+            className={({ isActive }) => isActive ? "c-menu-enlace c-menu-enlace-activo" : "c-menu-enlace"}
+          >
+            Listar Pokémon
+          </NavLink>
+        </li>
+        <li className="c-menu-item">
+          <NavLink
+            to="/original"
+            className={({ isActive }) => isActive ? "c-menu-enlace c-menu-enlace-activo" : "c-menu-enlace"}
+          >
+            Pokédex Original
+          </NavLink>
+        </li>
+        <li className="c-menu-item">
+          <NavLink
+            to="/aleatorio"
+            className={({ isActive }) => isActive ? "c-menu-enlace c-menu-enlace-activo" : "c-menu-enlace"}
+          >
+            Aleatorios
+          </NavLink>
+        </li>
+        <li className="c-menu-item">
+          <NavLink
+            to="/favoritos"
+            className={({ isActive }) => isActive ? "c-menu-enlace c-menu-enlace-activo" : "c-menu-enlace"}
+          >
+            Favoritos
+          </NavLink>
+        </li>
+        <li className="c-menu-item">
+          <NavLink
+            to="/usuario"
+            className={({ isActive }) => isActive ? "c-menu-enlace c-menu-enlace-activo" : "c-menu-enlace"}
+          >
+            Usuario
+          </NavLink>
+        </li>
+      </ul>
     </nav>
-  )
+  );
 }
 
-export default Menu
+export default Menu;

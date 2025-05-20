@@ -1,52 +1,58 @@
-import './style.css'
-
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+// src/Componentes/Favoritos/index.jsx
+import { useContext } from 'react';
+import { AppContext } from '../../contexto/contexto'; 
+import { useNavigate } from "react-router-dom";
 
 function Favoritos() {
-  const [favoritos, setFavoritos] = useState([]);
+  const { favoritos } = useContext(AppContext); // No necesitamos setFavoritos aquí, solo leerlos
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const almacenados = localStorage.getItem("favoritosPokemon");
-    if (almacenados) {
-      setFavoritos(JSON.parse(almacenados));
-    }
-  }, []);
+  if (!favoritos || favoritos.length === 0) {
+    return (
+      <section className="c-favoritos c-lista-vacia">
+        <p>Aún no has añadido ningún Pokémon a tus favoritos.</p>
+        <p>¡Explora la lista y marca los que más te gusten con un 🤍!</p>
+      </section>
+    );
+  }
 
   return (
-    <section className="c-lista">
-      <h2>Pokémon Favoritos</h2>
-      {favoritos.length === 0 ? (
-        <p>No hay favoritos aún.</p>
-      ) : (
-        favoritos.map((pokemon, index) => {
-          const id = pokemon.url.split("/")[6];
+    <section className='c-favoritos c-lista'>
+      <h2 className="c-favoritos-titulo">Mis Pokémon Favoritos</h2>
+      <div className='c-lista-grid'> {/* Contenedor para la cuadrícula de Pokémon */}
+        {favoritos.map((pokemon) => {
+          // Asegurarse de que el objeto pokemon tiene las propiedades esperadas
+          // (id y nombre son las que guardamos desde el componente Detalle)
+          if (!pokemon || !pokemon.id || !pokemon.nombre) {
+            // Podríamos registrar un error o simplemente omitir este elemento
+            console.warn("Elemento favorito con formato incorrecto:", pokemon);
+            return null; 
+          }
+          
           return (
-            <div 
-              className="c-lista-pokemon"
-              key={index}
-              onClick={() => navigate(`/detalle/${pokemon.name}`)}
+            <div
+              className='c-lista-pokemon c-favorito-item'
+              // Navegar usando pokemon.nombre, ya que Detalle.jsx usa useParams().name para el fetch.
+              // Si Detalle.jsx fuera a usar el ID, entonces aquí sería pokemon.id.
+              onClick={() => navigate(`/detalle/${pokemon.nombre.toLowerCase()}`)}
+              key={pokemon.id} // Usar el ID del Pokémon como key, que debería ser único
             >
-              <p>{id}</p>
-              <img 
-                src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`} 
-                alt={pokemon.name}
-                width="200"
-                height="200"
+              <img
+                src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png`}
+                alt={`Pokémon ${pokemon.nombre}`}
+                width='150' // Ajustar tamaño si es necesario para la lista
+                height='150'
+                loading='lazy'
+                className='c-lista-pokemon-imagen'
               />
-              <p>{pokemon.name}</p>
+              <p className='c-lista-pokemon-nombre'>{pokemon.nombre}</p>
+              <p className='c-lista-pokemon-id'>ID: {pokemon.id}</p>
             </div>
           );
-        })
-      )}
+        })}
+      </div>
     </section>
   );
 }
 
 export default Favoritos;
-// Este componente muestra los Pokémon favoritos del usuario.
-// Utiliza el localStorage para almacenar y recuperar los Pokémon favoritos.
-// Al hacer clic en un Pokémon, redirige a la página de detalles del Pokémon seleccionado.
-// Se utiliza el hook useEffect para cargar los favoritos al montar el componente.
-// Se utiliza el hook useState para manejar el estado de los favoritos.
